@@ -18,4 +18,4 @@ cleanup:
 	rm *.o
 
 exec:
-	./space_invaders.exe
+	./huffmaninator.exe
