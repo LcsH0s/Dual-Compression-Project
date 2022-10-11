@@ -1,0 +1,12 @@
+[
+    {
+        "command": "gcc -c src/libs/helper.c -o helper.o -Wall",
+        "directory": "/Users/lucasdecastro/Documents/XPROG/C/space-invaders",
+        "file": "/Users/lucasdecastro/Documents/XPROG/C/space-invaders/src/libs/helper.c"
+    },
+    {
+        "command": "gcc -c src/main.c -o main.o -Wall",
+        "directory": "/Users/lucasdecastro/Documents/XPROG/C/space-invaders",
+        "file": "/Users/lucasdecastro/Documents/XPROG/C/space-invaders/src/main.c"
+    }
+]

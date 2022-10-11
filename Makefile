@@ -1,15 +1,18 @@
 SRC_FILE=src/
 LIBS_FILE=src/libs/
 C_FLAGS=-Wall
+CC=gcc
 
-all: main libs cleanup
-	cc main.o helper.o -o space_invaders.exe
+all: build cleanup
+
+build: libs main  
+	$(CC) main.o helper.o -o space_invaders.exe $(C_FLAGS)
 
 main:
-	cc -c $(SRC_FILE)main.c -o main.o
+	$(CC) -c $(SRC_FILE)main.c -o main.o $(C_FLAGS)
 
 libs:
-	cc -c $(LIBS_FILE)helper.c -o helper.o
+	$(CC) -c $(LIBS_FILE)helper.c -o helper.o $(C_FLAGS)
 
 cleanup:
 	rm *.o

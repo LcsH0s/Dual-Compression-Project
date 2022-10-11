@@ -1,0 +1,10 @@
+{
+	"makefile.launchConfigurations": [
+		{
+			"cwd": "/Users/lucasdecastro/Documents/XPROG/C/space-invaders",
+			"binaryPath": "/Users/lucasdecastro/Documents/XPROG/C/space-invaders/space_invaders.exe",
+			"binaryArgs": []
+		}
+	],
+	"makefile.compileCommandsPath": ".vscode/compile_commands.json"
+}
