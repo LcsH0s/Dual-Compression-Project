@@ -4,31 +4,41 @@
 
 #include "helper.h"
 
+void show_help()
+{
+    printf("usage: huffmaninator [-cx] [-s \"string\"] [-f filepath]\n");
+}
+
 struct args arg_parse(int argc, char **argv)
 {
     int c;
     struct args args = {0, NULL, NULL};
 
-    if ((c = getopt(argc, argv, "f:s:")) != -1)
+    while ((c = getopt(argc, argv, "edf:s:")) != -1)
     {
         switch (c)
         {
+        case 'x':
+            args.mode = EXTRACT_MODE;
+            break;
+        case 'c':
+            args.mode = COMPRESS_MODE;
+            break;
         case 'f':
-            args.mode = FILE_MODE;
+            args.input_mode = FILE_MODE;
             args.filepath = optarg;
             break;
         case 's':
-            args.mode = STR_MODE;
+            args.input_mode = STR_MODE;
             args.str = optarg;
             break;
+        case 'h':
+            show_help();
+            exit(0);
         default:
             abort();
         }
     }
-    else
-    {
-        printf("No arguments specified");
-        exit(-1);
-    }
+
     return args;
 }
