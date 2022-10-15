@@ -3,7 +3,7 @@ LIBS_FILE=src/libs/
 C_FLAGS=-Wall
 CC=gcc
 
-all: build cleanup exec
+all: build cleanup
 
 build: libs main  
 	$(CC) main.o helper.o tree.o -o huffmaninator $(C_FLAGS)

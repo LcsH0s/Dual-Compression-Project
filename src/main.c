@@ -8,9 +8,15 @@ int main(int argc, char **argv)
 {
 
     struct args args = arg_parse(argc, argv);
-    // printf("The mode is %c\nThe filepath is : %s\nThe string is : %s\n", args.mode, args.filepath, args.str);
+    struct input input = get_input(args);
+
+    vocc occurences;
+    occurences.init = &vocc_init;
+    occurences.init(&occurences);
+
+    occurences.compute(&occurences, input);
 
     tree huff_tree;
     huff_tree.init = &tree_init;
-    huff_tree.init(&huff_tree);
+    huff_tree.init(&huff_tree, 'a');
 }

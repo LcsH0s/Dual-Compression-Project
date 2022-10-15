@@ -14,6 +14,14 @@ struct args
     char *str;
 };
 
+struct input
+{
+    char *str;
+    long int len;
+};
+
 struct args arg_parse(int argc, char **argv);
+
+struct input get_input(struct args args);
 
 #endif
