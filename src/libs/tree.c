@@ -4,45 +4,96 @@
 #include "tree.h"
 #include "helper.h"
 
-void tree_init(tree *self, char c)
+void vtree_init(vtree *self, const vocc *occurences)
 {
-    self->disp = &tree_disp;
-    self->r = NULL;
-    self->l = NULL;
+    self->list = malloc(sizeof(tree *) * occurences->len);
+    self->len = occurences->len;
+    self->sort = &vtree_sort;
+    self->compute = &vtree_compute;
 
-    self->c = c;
+    for (int i = 0; i < occurences->len; i++)
+    {
+        self->list[i] = malloc(sizeof(tree));
+        self->list[i]->c = occurences->chars[i];
+        self->list[i]->ltree = NULL;
+        self->list[i]->rtree = NULL;
+        self->list[i]->weight = occurences->n[i];
+    }
 }
 
-void tree_disp(tree *self) // WIP : Not currently working
+void vtree_sort(vtree *self)
 {
-    tree *c_tree = self;
-    tree *bak_tree = self;
-
-    printf("%c ", self->c);
-    while (!(c_tree->l == NULL & c_tree->r == NULL))
+    tree *tmp;
+    for (int i = 0; i < self->len - 1; i++)
     {
-        if (c_tree->l == NULL)
+        for (int j = 0; j < self->len - 1 - i; j++)
         {
-            c_tree = c_tree->r;
-            printf("%c ", c_tree->c);
-        }
-        else if (c_tree->r != NULL)
-        {
-            bak_tree = c_tree;
-            c_tree = c_tree->l;
-            printf("%c ", c_tree->c);
-        }
-        else
-        {
-            c_tree = c_tree->r;
-            printf("%c ", c_tree->c);
-        }
-        if (c_tree->l == NULL & c_tree->r == NULL)
-        {
-            c_tree = bak_tree;
+            if (self->list[j]->weight > self->list[j + 1]->weight)
+            {
+                tmp = self->list[j];
+                self->list[j] = self->list[j + 1];
+                self->list[j + 1] = tmp;
+            }
         }
     }
 }
+
+void __tree_disp(tree *t)
+{
+    if (t->c != TREE_NO_CHAR)
+    {
+        if (t->c == '\n')
+        {
+            printf("\\n ");
+        }
+        else if (t->c == ' ')
+        {
+            printf("' ' ");
+        }
+        else
+        {
+            printf("%c ", t->c);
+        }
+        return;
+    }
+    else
+    {
+        __tree_disp(t->ltree);
+        __tree_disp(t->rtree);
+    }
+}
+
+void vtree_disp(const vtree *self)
+{
+    __tree_disp(self->list[0]);
+    printf("\n");
+}
+
+void vtree_compute(vtree *self)
+{
+    while (self->len > 1)
+    {
+        tree *new_tree = malloc(sizeof(tree));
+
+        new_tree->c = TREE_NO_CHAR;
+        new_tree->ltree = self->list[0];
+        new_tree->rtree = self->list[1];
+        new_tree->weight = self->list[0]->weight + self->list[1]->weight;
+
+        for (int i = 1; i < self->len; i++)
+        {
+            self->list[i - 1] = self->list[i];
+        }
+
+        self->len--;
+        self->list[0] = new_tree;
+        self->sort(self);
+    }
+    printf("Tree computed!\n");
+    vtree_disp(self);
+}
+
+#pragma region VOcc // Occurences vector region
 
 void vocc_init(vocc *self)
 {
@@ -116,21 +167,14 @@ void vocc_compute(vocc *self, struct input input)
     {
         if (self->get_index(self, input.str[i]) == -1)
         {
-            printf("Char '%c'is not known yet. Adding it to occurences array\n", input.str[i]);
             self->append(self, input.str[i]);
         }
         else
         {
-            printf("'%c' already known\n", input.str[i]);
             self->n[self->get_index(self, input.str[i])]++;
         }
     }
     self->sort(self);
-
-    printf("\nOccurences are : \n");
-
-    for (int i = 0; i < self->len; i++)
-    {
-        printf("'%c' appeared %d times\n", self->chars[i], self->n[i]);
-    }
 }
+
+#pragma endregion VOcc

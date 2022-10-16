@@ -3,15 +3,7 @@
 
 #include "helper.h"
 
-typedef struct tree // Huffman tree class
-{
-    char c;
-    struct tree *l;
-    struct tree *r;
-
-    void (*init)(struct tree *self, char c);
-    void (*disp)(struct tree *self);
-} tree;
+#define TREE_NO_CHAR -1
 
 typedef struct vocc // Vector containing the occurences class
 {
@@ -28,16 +20,34 @@ typedef struct vocc // Vector containing the occurences class
     int (*get_index)(const struct vocc *self, char c);
 } vocc;
 
-// tree class methods
-void tree_init(tree *self, char c);
-void tree_disp(tree *self);
+typedef struct tree // Huffman tree class
+{
+    char c;
+    int weight;
+    struct tree *ltree;
+    struct tree *rtree;
+} tree;
+
+typedef struct vtree
+{
+    tree **list;
+    size_t len;
+
+    void (*init)(struct vtree *self, const vocc *occurences);
+    void (*sort)(struct vtree *self);
+    void (*compute)(struct vtree *self);
+} vtree;
 
 // vector of occurences class methods
 void vocc_init(vocc *self);
 void vocc_append(vocc *self, char c);
 void vocc_sort(vocc *self);
 void vocc_compute(vocc *self, struct input input);
-
 int vocc_get_index_of_char(const vocc *self, char c);
+
+// vtree class methods
+void vtree_init(vtree *self, const vocc *occurences);
+void vtree_sort(vtree *self);
+void vtree_compute(vtree *self);
 
 #endif

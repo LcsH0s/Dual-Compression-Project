@@ -19,15 +19,15 @@ void show_help()
 struct args arg_parse(int argc, char **argv)
 {
     int c;
-    struct args args = {0, 0, NULL, NULL};
+    struct args args = {COMPRESS_MODE, 0, NULL, NULL};
 
     if (argc == 1)
     {
-        printf("usage: huffmaninator [-cx] [-s \"string\"] [-f filepath]. Use -h for help\n");
+        printf("usage: huffmaninator [-cx] [-s \"string\"] [-f filepath] -> Use -h for help\n");
         exit(0);
     }
 
-    while ((c = getopt(argc, argv, "exhf:s:")) != -1)
+    while ((c = getopt(argc, argv, "cxhf:s:")) != -1)
     {
         switch (c)
         {
@@ -52,7 +52,12 @@ struct args arg_parse(int argc, char **argv)
             abort();
         }
     }
-
+    if (args.input_mode == 0)
+    {
+        printf("No input specified. Use -h for help.\n");
+        printf("usage: huffmaninator [-cx] [-s \"string\"] [-f filepath]\n");
+        exit(0);
+    }
     return args;
 }
 

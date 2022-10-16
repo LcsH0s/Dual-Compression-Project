@@ -3,7 +3,7 @@ LIBS_FILE=src/libs/
 C_FLAGS=-Wall
 CC=gcc
 
-all: build cleanup
+all: build cleanup exec
 
 build: libs main  
 	$(CC) main.o helper.o tree.o -o huffmaninator $(C_FLAGS)
@@ -19,4 +19,4 @@ cleanup:
 	rm *.o
 
 exec:
-	./huffmaninator
+	./huffmaninator -c -f /Users/lucasdecastro/Documents/XPROG/C/huffmaninator/testfile.txt
