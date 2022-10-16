@@ -52,7 +52,9 @@ void vocc_init(vocc *self)
     self->len = 0;
 
     self->compute = &vocc_compute;
-    self->is_known = &vocc_is_known;
+    self->get_index = &vocc_get_index_of_char;
+    self->sort = &vocc_sort;
+    self->append = &vocc_append;
 }
 
 void vocc_append(vocc *self, char c)
@@ -76,21 +78,59 @@ void vocc_append(vocc *self, char c)
     self->n = tmp_n;
 }
 
-void vocc_compute(vocc *self, struct input input)
-{
-    for (int i = 0; i < input.len; i++)
-    {
-        printf("%c", input.str[i]);
-    }
-    printf("\nTest\n");
-}
-
-int vocc_is_known(const vocc *self, char c)
+int vocc_get_index_of_char(const vocc *self, char c)
 {
     for (int i = 0; i < self->len; i++)
     {
         if (self->chars[i] == c)
-            return 1;
+            return i;
     }
-    return 0;
+    return -1;
+}
+
+void vocc_sort(vocc *self)
+{
+    int n_tmp;
+    char c_tmp;
+    for (int i = 0; i < self->len - 1; i++)
+    {
+        for (int j = 0; j < self->len - 1 - i; j++)
+        {
+            if (self->n[j] > self->n[j + 1])
+            {
+                n_tmp = self->n[j];
+                self->n[j] = self->n[j + 1];
+                self->n[j + 1] = n_tmp;
+
+                c_tmp = self->chars[j];
+                self->chars[j] = self->chars[j + 1];
+                self->chars[j + 1] = c_tmp;
+            }
+        }
+    }
+}
+
+void vocc_compute(vocc *self, struct input input)
+{
+    for (int i = 0; i < input.len; i++)
+    {
+        if (self->get_index(self, input.str[i]) == -1)
+        {
+            printf("Char '%c'is not known yet. Adding it to occurences array\n", input.str[i]);
+            self->append(self, input.str[i]);
+        }
+        else
+        {
+            printf("'%c' already known\n", input.str[i]);
+            self->n[self->get_index(self, input.str[i])]++;
+        }
+    }
+    self->sort(self);
+
+    printf("\nOccurences are : \n");
+
+    for (int i = 0; i < self->len; i++)
+    {
+        printf("'%c' appeared %d times\n", self->chars[i], self->n[i]);
+    }
 }

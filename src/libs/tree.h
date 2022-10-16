@@ -22,7 +22,10 @@ typedef struct vocc // Vector containing the occurences class
 
     void (*init)(struct vocc *self);
     void (*compute)(struct vocc *self, struct input input);
-    int (*is_known)(const struct vocc *self, char c);
+    void (*append)(struct vocc *self, char c);
+    void (*sort)(struct vocc *self);
+
+    int (*get_index)(const struct vocc *self, char c);
 } vocc;
 
 // tree class methods
@@ -31,7 +34,10 @@ void tree_disp(tree *self);
 
 // vector of occurences class methods
 void vocc_init(vocc *self);
+void vocc_append(vocc *self, char c);
+void vocc_sort(vocc *self);
 void vocc_compute(vocc *self, struct input input);
-int vocc_is_known(const vocc *self, char c);
+
+int vocc_get_index_of_char(const vocc *self, char c);
 
 #endif
