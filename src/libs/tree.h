@@ -24,6 +24,7 @@ typedef struct tree // Huffman tree class
 {
     char c;
     int weight;
+    char in_dict;
     struct tree *ltree;
     struct tree *rtree;
 } tree;
@@ -42,6 +43,7 @@ typedef struct vtree
 void vocc_init(vocc *self);
 void vocc_append(vocc *self, char c);
 void vocc_sort(vocc *self);
+void vocc_disp(vocc *self);
 void vocc_compute(vocc *self, struct input input);
 int vocc_get_index_of_char(const vocc *self, char c);
 

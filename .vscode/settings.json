@@ -1,0 +1,29 @@
+{
+	"makefile.launchConfigurations": [
+		{
+			"cwd": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/",
+			"binaryPath": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/huffmaninator",
+			"binaryArgs": []
+		}
+	],
+	"makefile.compileCommandsPath": ".vscode/compile_commands.json",
+	"sonarlint.pathToCompileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
+	"files.associations": {
+		"__locale": "c",
+		"helper.h": "c",
+		"cstdlib": "c",
+		"exception": "c",
+		"ios": "c",
+		"optional": "c",
+		"stdexcept": "c",
+		"string": "c",
+		"typeinfo": "c",
+		"variant": "c",
+		"vector": "c",
+		"new": "c",
+		"stdlib.h": "c",
+		"sstream": "c",
+		"__tree": "c",
+		"tree.h": "c"
+	}
+}

@@ -2,6 +2,7 @@
 
 #include "libs/helper.h"
 #include "libs/tree.h"
+#include "libs/compactor.h"
 
 int main(int argc, char **argv)
 {
@@ -20,6 +21,10 @@ int main(int argc, char **argv)
         huff_tree.init = &vtree_init;
         huff_tree.init(&huff_tree, &occurences);
         huff_tree.compute(&huff_tree);
+
+        dict huff_dict;
+        huff_dict.init = &dict_init;
+        huff_dict.init(&huff_dict, huff_tree, occurences);
     }
     else
     {
