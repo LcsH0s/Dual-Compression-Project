@@ -3,12 +3,14 @@
 #include "libs/helper.h"
 #include "libs/tree.h"
 #include "libs/dict.h"
+#include "libs/compactor.h"
 
 int main(int argc, char **argv)
 {
     struct args args = arg_parse(argc, argv);
     struct input input = get_input(args);
-    FILE *f = file_init(args);
+    FILE *f_in = input_file_init(args);
+    FILE *f_out = output_file_init(args);
 
     if (args.mode == COMPRESS_MODE)
     {
@@ -25,13 +27,15 @@ int main(int argc, char **argv)
         dict huff_dict;
         huff_dict.init = &dict_init;
         huff_dict.init(&huff_dict, huff_tree, occurences);
-        huff_dict.save(&huff_dict, f);
+        huff_dict.save(&huff_dict, f_out);
+
+        compress(huff_dict, input, f_out);
     }
     else
     {
         printf("EXTRACT_MODE is still a WIP\n");
         dict huff_dict;
         huff_dict.load = &dict_load;
-        huff_dict.load(&huff_dict, f);
+        huff_dict.load(&huff_dict, f_in);
     }
 }

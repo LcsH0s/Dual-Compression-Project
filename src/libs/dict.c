@@ -7,6 +7,7 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
 {
     self->disp = &dict_disp;
     self->save = &dict_save;
+    self->get_index = &get_index_of_char;
 
     self->len = (short)_vocc.len;
     self->chars = _vocc.chars;
@@ -102,7 +103,7 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
             bit_value = bit_value >> 1;
         }
     }
-    dict_disp(self);
+    // dict_disp(self);
 }
 
 void dict_disp(const dict *self)
@@ -123,6 +124,18 @@ void dict_disp(const dict *self)
         }
         printf("\n");
     }
+}
+
+int get_index_of_char(const dict *self, char c)
+{
+    for (int i = 0; i < self->len; i++)
+    {
+        if (self->chars[i] == c)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void dict_save(const dict *self, FILE *f)

@@ -82,7 +82,6 @@ struct input get_input(struct args args)
         r.len = strlen(args.str);
         r.str = malloc(sizeof(char) * r.len);
         strcpy(r.str, args.str);
-        return r;
     }
     else if (access(args.filepath, F_OK) == 0)
     {
@@ -98,7 +97,6 @@ struct input get_input(struct args args)
                 fread(r.str, 1, r.len, input_file);
             }
             fclose(input_file);
-            return r;
         }
     }
     else
@@ -106,70 +104,72 @@ struct input get_input(struct args args)
         printf("ERROR: Unable to access file: %s\n", args.filepath);
         exit(-1);
     }
+    return r;
 }
 
-FILE *file_init(struct args args)
+FILE *input_file_init(struct args args)
 {
     FILE *fp;
-    if (args.mode == COMPRESS_MODE)
+
+    fp = fopen(args.filepath, "rb");
+
+    if (fp == NULL)
     {
+        printf("\n The file '%s' could not be opened", args.filepath);
+        exit(1);
+    }
+    // CODE
+    fgetc(fp);
+    // END CODE
+    if (ferror(fp))
+    {
+        printf("\n Error reading file : %s", args.filepath);
+        fclose(fp);
+        exit(1);
+    }
+    else
+    {
+        fclose(fp);
+        fp = fopen(args.filepath, "rb");
+
+        if (fp == NULL)
+        {
+            printf("\n The file '%s' could not be opened", args.filepath);
+            exit(1);
+        }
+    }
+    return fp;
+}
+
+FILE *output_file_init(struct args args)
+{
+    FILE *fp;
+
+    fp = fopen(args.dest, "wb");
+
+    if (fp == NULL)
+    {
+        printf("The file '%s' could not be created\n", args.dest);
+        exit(1);
+    }
+    // CODE
+    fputc('t', fp);
+    // END CODE
+    if (ferror(fp))
+    {
+        printf("Error writing in file : %s\n", args.dest);
+        fclose(fp);
+        exit(1);
+    }
+    else
+    {
+        fclose(fp);
         fp = fopen(args.dest, "wb");
 
         if (fp == NULL)
         {
-            printf("\n The file '%s' could not be opened", args.dest);
+            printf("The file '%s' could not be created\n", args.dest);
             exit(1);
-        }
-        // CODE
-        fputc('t', fp);
-        // END CODE
-        if (ferror(fp))
-        {
-            printf("\n Error writing in file : %s", args.dest);
-            fclose(fp);
-            exit(1);
-        }
-        else
-        {
-            fclose(fp);
-            fp = fopen(args.dest, "wb");
-
-            if (fp == NULL)
-            {
-                printf("\n The file '%s' could not be opened", args.dest);
-                exit(1);
-            }
         }
     }
-    else if (args.mode == EXTRACT_MODE)
-    {
-        fp = fopen(args.dest, "rb");
-
-        if (fp == NULL)
-        {
-            printf("\n The file '%s' could not be opened", args.dest);
-            exit(1);
-        }
-        // CODE
-        fgetc(fp);
-        // END CODE
-        if (ferror(fp))
-        {
-            printf("\n Error reading file : %s", args.dest);
-            fclose(fp);
-            exit(1);
-        }
-        else
-        {
-            fclose(fp);
-            fp = fopen(args.dest, "rb");
-
-            if (fp == NULL)
-            {
-                printf("\n The file '%s' could not be opened", args.dest);
-                exit(1);
-            }
-        }
-    }
-    return fp;
 }

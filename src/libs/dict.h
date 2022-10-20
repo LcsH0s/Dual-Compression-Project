@@ -18,11 +18,13 @@ typedef struct dict
     void (*disp)(const struct dict *self);
     void (*save)(const struct dict *self, FILE *f);
     void (*load)(struct dict *self, FILE *f);
+    int (*get_index)(const struct dict *self, char c);
 } dict;
 
 void dict_init(dict *self, const vtree _vtree, const vocc _vocc);
 void dict_disp(const dict *self);
 void dict_save(const dict *self, FILE *f);
 void dict_load(dict *self, FILE *f);
+int get_index_of_char(const dict *self, char c);
 
 #endif

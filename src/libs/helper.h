@@ -24,6 +24,7 @@ struct input
 
 struct args arg_parse(int argc, char **argv);
 struct input get_input(struct args args);
-FILE *file_init(struct args args);
+FILE *input_file_init(struct args args);
+FILE *output_file_init(struct args args);
 
 #endif
