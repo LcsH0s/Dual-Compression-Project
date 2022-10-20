@@ -58,7 +58,7 @@ void vocc_sort(vocc *self)
     {
         for (int j = 0; j < self->len - 1 - i; j++)
         {
-            if (self->n[j] < self->n[j + 1])
+            if (self->n[j] > self->n[j + 1])
             {
                 n_tmp = self->n[j];
                 self->n[j] = self->n[j + 1];

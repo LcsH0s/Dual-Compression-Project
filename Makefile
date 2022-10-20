@@ -1,6 +1,6 @@
 SRC_FILE=src/
 LIBS_FILE=src/libs/
-C_FLAGS=-Wall
+C_FLAGS=-Wall -Wno-unknown-pragmas
 CC=gcc
 
 all: build cleanup exec
@@ -20,4 +20,5 @@ cleanup:
 	rm *.o
 
 exec:
-	./huffmaninator -c -f /Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/testfile.txt
+	./huffmaninator -c -s TARATATABARBAPAPA
+	./huffmaninator -c -f testfile.txt

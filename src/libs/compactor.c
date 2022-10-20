@@ -24,18 +24,17 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
     while (i < self->len)
     {
         /*
-        printf("depth : %d\n", depth);
-        printf("i : %d\n", i);
-        printf("len : %lu\n", self->len);
+                printf("depth : %d\n", depth);
+                printf("i : %d\n", i);
+                printf("len : %lu\n", self->len);
 
-        printf("(current->ltree == NULL) = %d\n", (current->ltree == NULL));
-        printf("(current->rtree == NULL) = %d\n", (current->rtree == NULL));
-        printf("(current == head) = %d\n", (current == head));
-        printf("(current->c == TREE_NO_CHAR) = %d\n", (current->c == TREE_NO_CHAR));
-        printf("(current->ltree->in_dict) = %d\n", (current->ltree->in_dict));
-        printf("(current->rtree->in_dict) = %d\n", (current->rtree->in_dict));
+                printf("(current->ltree == NULL) = %d\n", (current->ltree == NULL));
+                printf("(current->rtree == NULL) = %d\n", (current->rtree == NULL));
+                printf("(current == head) = %d\n", (current == head));
+                printf("(current->c == TREE_NO_CHAR) = %d\n", (current->c == TREE_NO_CHAR));
+                printf("(current->ltree->in_dict) = %d\n", (current->ltree->in_dict));
+                printf("(current->rtree->in_dict) = %d\n", (current->rtree->in_dict));
         */
-
         if (current->ltree != NULL)
         {
             if (current->ltree->in_dict == 0)
@@ -43,7 +42,7 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
                 prev_tree = current;
                 current = current->ltree;
                 depth++;
-                bit_value = bit_value * 2;
+                bit_value = bit_value << 1;
             }
             else if (current->rtree != NULL)
             {
@@ -52,14 +51,22 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
                     prev_tree = current;
                     current = current->rtree;
                     depth++;
-                    bit_value = bit_value * 2;
-                    bit_value = bit_value + 1;
+                    bit_value = bit_value << 1;
+                    bit_value = bit_value + 0b1;
+                }
+                else if (depth > 0)
+                {
+                    current->in_dict = 1;
+                    current = prev_tree;
+                    depth--;
+                    bit_value >> 1;
                 }
                 else
                 {
                     current->in_dict = 1;
                     current = head;
                     depth = 0;
+                    bit_value = 0;
                 }
             }
         }
@@ -71,15 +78,22 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
                 prev_tree = current;
                 current = current->rtree;
                 depth++;
-                bit_value = bit_value * 2;
-                bit_value = bit_value + 1;
+                bit_value = bit_value << 1;
+                bit_value = bit_value + 0b1;
+            }
+            else if (depth > 0)
+            {
+                current->in_dict = 1;
+                current = prev_tree;
+                bit_value >> 1;
+                depth--;
             }
             else
             {
                 current->in_dict = 1;
                 current = head;
-                bit_value = 0;
                 depth = 0;
+                bit_value = 0;
             }
         }
         if ((current->c != TREE_NO_CHAR) & (current->in_dict == 0))
@@ -87,16 +101,17 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
             current->in_dict = 1;
             self->bitsizes[i] = depth;
             self->bitfield[i] = bit_value;
-            depth = 0;
-            bit_value = 0;
-            current = head;
+            depth--;
+            bit_value >> 1;
+            current = prev_tree;
             i++;
         }
         if ((current->rtree == NULL) & (current->ltree == NULL))
         {
+            current->in_dict = 0;
             current = prev_tree;
             depth--;
-            bit_value = bit_value / 2;
+            bit_value = bit_value >> 1;
         }
     }
     dict_disp(self);
@@ -108,15 +123,15 @@ void dict_disp(const dict *self)
     {
         if (self->chars[i] != '\n')
         {
-            printf("Char '%c' uses %d bits and has code : ", self->chars[i], self->bitsizes[i]);
+            printf("Char '%c' uses %d bits and has code : ", self->chars[i], self->bitsizes[self->len - i - 1]);
         }
         else
         {
-            printf("Char '\\n' uses %d bits and has code : ", self->bitsizes[i]);
+            printf("Char '\\n' uses %d bits and has code : ", self->bitsizes[self->len - i - 1]);
         }
-        for (int j = self->bitsizes[i] - 1; j >= 0; j--)
+        for (int j = self->bitsizes[self->len - i - 1] - 1; j >= 0; j--)
         {
-            printf("%d", !!(self->bitfield[i] & (1u << j)));
+            printf("%d", !!(self->bitfield[self->len - i - 1] & (1u << j)));
         }
         printf("\n");
     }
