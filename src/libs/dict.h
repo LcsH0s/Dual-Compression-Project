@@ -1,5 +1,5 @@
-#ifndef COMPACTOR_H
-#define COMPACTOR_H
+#ifndef DICT_H
+#define DICT_H
 
 #include <stdio.h>
 
@@ -9,16 +9,20 @@
 
 typedef struct dict
 {
-    size_t len;
+    short len;
     char *chars;
-    int *bitsizes;
-    unsigned *bitfield;
+    short *bitsizes;
+    short unsigned *bitfield;
 
     void (*init)(struct dict *self, const vtree _vtree, const vocc _vocc);
     void (*disp)(const struct dict *self);
+    void (*save)(const struct dict *self, FILE *f);
+    void (*load)(struct dict *self, FILE *f);
 } dict;
 
 void dict_init(dict *self, const vtree _vtree, const vocc _vocc);
 void dict_disp(const dict *self);
+void dict_save(const dict *self, FILE *f);
+void dict_load(dict *self, FILE *f);
 
 #endif

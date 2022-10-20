@@ -9,7 +9,6 @@ typedef struct vocc // Vector containing the occurences class
 {
     unsigned int *n;
     char *chars;
-
     size_t len;
 
     void (*init)(struct vocc *self);
