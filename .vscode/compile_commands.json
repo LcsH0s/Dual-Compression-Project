@@ -1,21 +1,26 @@
 [
     {
-        "command": "gcc -c src/libs/helper.c -o helper.o -Wall",
+        "command": "gcc -c src/libs/helper.c -o helper.o -Wall -Wno-unknown-pragmas",
         "directory": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5",
         "file": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/src/libs/helper.c"
     },
     {
-        "command": "gcc -c src/libs/tree.c -o tree.o -Wall",
+        "command": "gcc -c src/libs/tree.c -o tree.o -Wall -Wno-unknown-pragmas",
         "directory": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5",
         "file": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/src/libs/tree.c"
     },
     {
-        "command": "gcc -c src/libs/compactor.c -o compactor.o -Wall",
+        "command": "gcc -c src/libs/dict.c -o dict.o -Wall -Wno-unknown-pragmas",
+        "directory": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5",
+        "file": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/src/libs/dict.c"
+    },
+    {
+        "command": "gcc -c src/libs/compactor.c -o compactor.o -Wall -Wno-unknown-pragmas",
         "directory": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5",
         "file": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/src/libs/compactor.c"
     },
     {
-        "command": "gcc -c src/main.c -o main.o -Wall",
+        "command": "gcc -c src/main.c -o main.o -Wall -Wno-unknown-pragmas",
         "directory": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5",
         "file": "/Users/lucasdecastro/Documents/XPROG/C/projet-c-S5/src/main.c"
     }

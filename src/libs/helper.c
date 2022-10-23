@@ -98,6 +98,11 @@ struct input get_input(struct args args)
             }
             fclose(input_file);
         }
+        else
+        {
+            printf("ERROR: Unable to access file: %s\n", args.filepath);
+            exit(-1);
+        }
     }
     else
     {
@@ -109,33 +114,35 @@ struct input get_input(struct args args)
 
 FILE *input_file_init(struct args args)
 {
-    FILE *fp;
-
-    fp = fopen(args.filepath, "rb");
-
-    if (fp == NULL)
+    FILE *fp = NULL;
+    if (args.input_mode == FILE_MODE)
     {
-        printf("\n The file '%s' could not be opened", args.filepath);
-        exit(1);
-    }
-    // CODE
-    fgetc(fp);
-    // END CODE
-    if (ferror(fp))
-    {
-        printf("\n Error reading file : %s", args.filepath);
-        fclose(fp);
-        exit(1);
-    }
-    else
-    {
-        fclose(fp);
         fp = fopen(args.filepath, "rb");
 
         if (fp == NULL)
         {
             printf("\n The file '%s' could not be opened", args.filepath);
             exit(1);
+        }
+        // CODE
+        fgetc(fp);
+        // END CODE
+        if (ferror(fp))
+        {
+            printf("\n Error reading file : %s", args.filepath);
+            fclose(fp);
+            exit(1);
+        }
+        else
+        {
+            fclose(fp);
+            fp = fopen(args.filepath, "rb");
+
+            if (fp == NULL)
+            {
+                printf("\n The file '%s' could not be opened", args.filepath);
+                exit(1);
+            }
         }
     }
     return fp;
@@ -172,4 +179,14 @@ FILE *output_file_init(struct args args)
             exit(1);
         }
     }
+    return fp;
+}
+
+void disp_bin_form(unsigned short bitvalue, size_t s)
+{
+    for (int i = s - 1; i >= 0; i--)
+    {
+        printf(" %d", !!(bitvalue & (1u << i)));
+    }
+    printf("\n");
 }

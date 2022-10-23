@@ -21,7 +21,7 @@ cleanup:
 	rm *.o
 
 exec:
-	./huffmaninator -c -f testfile.txt
-	./huffmaninator -x -f archive.hca
-	./huffmaninator -c -s TARATATABARBAPAPA
-	./huffmaninator -x -f archive.hca
+	./huffmaninator -c -f testfile.txt -o testfile.hca
+	./huffmaninator -x -f testfile.hca
+#	./huffmaninator -c -s TARATATABARBAPAPA -o archivee.hca
+#	./huffmaninator -x -f archivee.hca -o oui.txt

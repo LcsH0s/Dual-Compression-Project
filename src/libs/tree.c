@@ -86,7 +86,6 @@ void vocc_compute(vocc *self, struct input input)
         }
     }
     self->sort(self);
-    // vocc_disp(self);
 }
 
 void vocc_disp(vocc *self)
@@ -199,7 +198,6 @@ void vtree_compute(vtree *self)
         self->list[0] = new_tree;
         self->sort(self);
     }
-    // printf("Tree computed!\n");
 }
 
 #pragma endregion VTree

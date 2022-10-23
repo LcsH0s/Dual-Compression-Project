@@ -24,6 +24,8 @@
 		"stdlib.h": "c",
 		"sstream": "c",
 		"__tree": "c",
-		"tree.h": "c"
+		"tree.h": "c",
+		"dict.h": "c",
+		"atomic": "c"
 	}
 }

@@ -8,6 +8,7 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
     self->disp = &dict_disp;
     self->save = &dict_save;
     self->get_index = &get_index_of_char;
+    self->get_char_with_code = &get_char_with_code;
 
     self->len = (short)_vocc.len;
     self->chars = _vocc.chars;
@@ -31,7 +32,7 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
                 prev_tree = current;
                 current = current->ltree;
                 depth++;
-                bit_value = bit_value << 1;
+                bit_value <<= 1;
             }
             else if (current->rtree != NULL)
             {
@@ -40,8 +41,8 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
                     prev_tree = current;
                     current = current->rtree;
                     depth++;
-                    bit_value = bit_value << 1;
-                    bit_value = bit_value + 0b1;
+                    bit_value <<= 1;
+                    bit_value++;
                 }
                 else if (depth > 0)
                 {
@@ -55,7 +56,7 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
                     current->in_dict = 1;
                     current = head;
                     depth = 0;
-                    bit_value = 0;
+                    bit_value <<= 1;
                 }
             }
         }
@@ -67,14 +68,14 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
                 prev_tree = current;
                 current = current->rtree;
                 depth++;
-                bit_value = bit_value << 1;
-                bit_value = bit_value + 0b1;
+                bit_value <<= 1;
+                bit_value++;
             }
             else if (depth > 0)
             {
                 current->in_dict = 1;
                 current = prev_tree;
-                bit_value = bit_value >> 1;
+                bit_value >>= 1;
                 depth--;
             }
             else
@@ -103,7 +104,6 @@ void dict_init(dict *self, const vtree _vtree, const vocc _vocc)
             bit_value = bit_value >> 1;
         }
     }
-    // dict_disp(self);
 }
 
 void dict_disp(const dict *self)
@@ -132,10 +132,37 @@ int get_index_of_char(const dict *self, char c)
     {
         if (self->chars[i] == c)
         {
+
             return i;
         }
     }
     return -1;
+}
+
+char get_char_with_code(const dict *self, unsigned short bitvalue)
+{
+    int tmp_bool = 0;
+    printf("BITVALUE is :");
+    for (int x = 7; x >= 0; x--)
+        printf("%d ", !!(bitvalue & (1u << x)));
+    printf("\n");
+
+        for (int i = 0; i < self->len; i++)
+    {
+        for (int j = self->bitsizes[i] - 1; j >= 0; j--)
+        {
+            if (((self->bitfield[i]) & (1 << j)) != (bitvalue & (1 << j)))
+            {
+                tmp_bool = 0;
+                break;
+            }
+        }
+        if (tmp_bool)
+            return self->chars[i];
+        else
+            tmp_bool = 1;
+    }
+    return INVALID_CHAR_CODE;
 }
 
 void dict_save(const dict *self, FILE *f)
@@ -158,6 +185,11 @@ void dict_load(dict *self, FILE *f)
     char *chars;
     short *bitsizes;
     unsigned short *bitfield;
+
+    self->disp = &dict_disp;
+    self->save = &dict_save;
+    self->get_index = &get_index_of_char;
+    self->get_char_with_code = &get_char_with_code;
 
     fread(&len, sizeof(len), 1, f);
 

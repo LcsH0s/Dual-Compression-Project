@@ -5,7 +5,7 @@
 
 #include "tree.h"
 
-#define MAX_BIT_SIZE 16
+#define INVALID_CHAR_CODE -1
 
 typedef struct dict
 {
@@ -19,6 +19,7 @@ typedef struct dict
     void (*save)(const struct dict *self, FILE *f);
     void (*load)(struct dict *self, FILE *f);
     int (*get_index)(const struct dict *self, char c);
+    char (*get_char_with_code)(const struct dict *self, unsigned short bitvalue);
 } dict;
 
 void dict_init(dict *self, const vtree _vtree, const vocc _vocc);
@@ -26,5 +27,6 @@ void dict_disp(const dict *self);
 void dict_save(const dict *self, FILE *f);
 void dict_load(dict *self, FILE *f);
 int get_index_of_char(const dict *self, char c);
+char get_char_with_code(const dict *self, unsigned short bitvalue);
 
 #endif
