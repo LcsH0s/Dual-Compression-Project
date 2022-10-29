@@ -38,6 +38,6 @@ int main(int argc, char **argv)
         huff_dict.load = &dict_load;
         huff_dict.load(&huff_dict, f_in);
 
-        decompress(&huff_dict, f_in);
+        decompress(&huff_dict, f_in, f_out);
     }
 }

@@ -141,26 +141,12 @@ int get_index_of_char(const dict *self, char c)
 
 char get_char_with_code(const dict *self, unsigned short bitvalue)
 {
-    int tmp_bool = 0;
-    printf("BITVALUE is :");
-    for (int x = 7; x >= 0; x--)
-        printf("%d ", !!(bitvalue & (1u << x)));
-    printf("\n");
-
-        for (int i = 0; i < self->len; i++)
+    for (int i = 0; i < self->len; i++)
     {
-        for (int j = self->bitsizes[i] - 1; j >= 0; j--)
+        if (((self->bitfield[i]) ^ bitvalue) == 0)
         {
-            if (((self->bitfield[i]) & (1 << j)) != (bitvalue & (1 << j)))
-            {
-                tmp_bool = 0;
-                break;
-            }
-        }
-        if (tmp_bool)
             return self->chars[i];
-        else
-            tmp_bool = 1;
+        }
     }
     return INVALID_CHAR_CODE;
 }

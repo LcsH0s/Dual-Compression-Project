@@ -6,81 +6,69 @@
 
 void compress(const dict d, const struct input input, FILE *f)
 {
-    fwrite(&input.len, sizeof(input.len), 1, f);
-
-    char buffer = 0;
-    char b_count = 0;
+    char buffer;
+    int b_count = 0;
     int dict_index;
+
+    fwrite(&input.len, sizeof(input.len), 1, f);
 
     for (int i = 0; i < input.len; i++)
     {
         dict_index = d.get_index(&d, input.str[i]);
-        // printf("Char n°%d with code : ", i);
-        // disp_bin_form(d.bitfield[dict_index], d.bitsizes[dict_index]);
-
-        for (int b = d.bitsizes[dict_index] - 1; b >= 0; b--)
+        for (int j = d.bitsizes[dict_index] - 1; j >= 0; j--)
         {
             buffer <<= 1;
-            if ((d.bitfield[dict_index]) & (1u << b))
+            if (!!(d.bitfield[dict_index] & (1u << j)))
+            {
                 buffer++;
+            }
             b_count++;
+
             if (b_count == 8)
             {
-                printf("Buffer biform is :");
-                for (int x = 7; x >= 0; x--)
-                    printf("%d ", !!(buffer & (1u << x)));
-                printf("\n");
-
-                fwrite(&buffer, sizeof(buffer), 1, f);
                 b_count = 0;
+                fputc(buffer, f);
                 buffer = 0;
             }
         }
-        fwrite(&buffer, sizeof(buffer), 1, f);
     }
+    fputc(buffer, f);
     fclose(f);
 }
 
-void decompress(const dict *d, FILE *f)
+void decompress(const dict *d, FILE *f_in, FILE *f_out)
 {
-    unsigned short bitvalue = 0;
-    long int char_count = 0;
     char buffer;
     char c;
+    unsigned int bitvalue = 0;
     long len;
-    int count = 2;
+    int char_count = 0;
 
-    fread(&len, sizeof(len), 1, f);
+    fread(&len, sizeof(len), 1, f_in);
 
-    while (fread(&buffer, 1, 1, f) == 1)
+    while (1)
     {
+        fread(&buffer, sizeof(buffer), 1, f_in);
 
-        if (count % 5 == 0)
+        for (int i = 7; i >= 0; i--)
         {
-            printf("Buffer biform is :");
-            for (int x = 7; x >= 0; x--)
-                printf("%d ", !!(buffer & (1u << x)));
-            printf("\n");
-
-            for (int i = 0; i < 8; i++)
+            bitvalue <<= 1;
+            if (!!(buffer & (1u << i)))
             {
-                bitvalue <<= 1;
-                if (buffer & (1u << i))
-                    bitvalue++;
-
-                c = d->get_char_with_code(d, bitvalue);
-                if (c != INVALID_CHAR_CODE)
-                {
-                    printf("%c\n", c);
-                    bitvalue = 0;
-                    char_count++;
-                }
+                bitvalue++;
             }
-            count++;
-        }
-        else
-        {
-            count++;
+
+            c = d->get_char_with_code(d, bitvalue);
+
+            if (c != INVALID_CHAR_CODE)
+            {
+                printf("%c ", c);
+                fputc(c, f_out);
+                char_count++;
+                if (char_count >= len)
+                    return;
+                bitvalue = 0;
+            }
         }
     }
 }
