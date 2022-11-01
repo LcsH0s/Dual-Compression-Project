@@ -6,7 +6,7 @@
 
 void compress(const dict d, const struct input input, FILE *f)
 {
-    char buffer;
+    char buffer = 0;
     int b_count = 0;
     int dict_index;
 
@@ -40,7 +40,7 @@ void decompress(const dict *d, FILE *f_in, FILE *f_out)
 {
     char buffer;
     char c;
-    unsigned int bitvalue = 0;
+    unsigned short bitvalue = 0;
     long len;
     int char_count = 0;
 
