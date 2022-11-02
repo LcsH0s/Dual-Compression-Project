@@ -33,7 +33,6 @@ int main(int argc, char **argv)
     }
     else
     {
-        printf("EXTRACT_MODE is still a WIP\n");
         dict huff_dict;
         huff_dict.load = &dict_load;
         huff_dict.load(&huff_dict, f_in);

@@ -139,13 +139,31 @@ int get_index_of_char(const dict *self, char c)
     return -1;
 }
 
-char get_char_with_code(const dict *self, unsigned short bitvalue)
+char get_char_with_code(const dict *self, unsigned short bitvalue, size_t s)
 {
+    int tmp_bool = 1;
+
     for (int i = 0; i < self->len; i++)
     {
-        if (((self->bitfield[i]) ^ bitvalue) == 0)
+        if (s != (self->bitsizes[i]))
+        {
+            tmp_bool = 0;
+            // printf("Not same size : %ld vs %d\n", s, self->bitsizes[i]);
+        }
+        for (int j = 0; j <= s; j++)
+        {
+            if ((bitvalue & (1u << j)) != ((self->bitfield[i]) & (1u << j)))
+            {
+                tmp_bool = 0;
+            }
+        }
+        if (tmp_bool)
         {
             return self->chars[i];
+        }
+        else
+        {
+            tmp_bool = 1;
         }
     }
     return INVALID_CHAR_CODE;
@@ -196,19 +214,4 @@ void dict_load(dict *self, FILE *f)
     self->chars = chars;
     self->bitsizes = bitsizes;
     self->bitfield = bitfield;
-
-    /*
-        printf("Dict len: %d\n", len);
-        printf("Dict total size: %d\n", len);
-
-        for (int i = 0; i < len; i++)
-        {
-            printf("Char %c uses %d bits with code : ", chars[i], bitsizes[i]);
-            for (int j = bitsizes[i] - 1; j >= 0; j--)
-            {
-                printf("%d", !!(bitfield[i] & (1u << j)));
-            }
-            printf("\n");
-        }
-    */
 }

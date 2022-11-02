@@ -6,7 +6,7 @@
 
 void compress(const dict d, const struct input input, FILE *f)
 {
-    char buffer;
+    char buffer = 0;
     int b_count = 0;
     int dict_index;
 
@@ -32,7 +32,8 @@ void compress(const dict d, const struct input input, FILE *f)
             }
         }
     }
-    fputc(buffer, f);
+    fputc(buffer << (8 - b_count), f);
+    fputc('`', f);
     fclose(f);
 }
 
@@ -40,9 +41,10 @@ void decompress(const dict *d, FILE *f_in, FILE *f_out)
 {
     char buffer;
     char c;
-    unsigned int bitvalue = 0;
+    unsigned short bitvalue = 0;
     long len;
     int char_count = 0;
+    int b_count = 0;
 
     fread(&len, sizeof(len), 1, f_in);
 
@@ -57,17 +59,19 @@ void decompress(const dict *d, FILE *f_in, FILE *f_out)
             {
                 bitvalue++;
             }
-
-            c = d->get_char_with_code(d, bitvalue);
+            b_count++;
+            c = d->get_char_with_code(d, bitvalue, b_count);
 
             if (c != INVALID_CHAR_CODE)
             {
-                printf("%c ", c);
                 fputc(c, f_out);
                 char_count++;
-                if (char_count >= len)
+                if (char_count == len)
+                {
                     return;
+                }
                 bitvalue = 0;
+                b_count = 0;
             }
         }
     }
