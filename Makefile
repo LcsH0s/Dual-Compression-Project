@@ -3,7 +3,7 @@ LIBS_FILE=src/libs/
 C_FLAGS=-Wall -Wno-unknown-pragmas
 CC=gcc
 
-all: build cleanup exec
+all: build cleanup
 
 build: libs main  
 	$(CC) main.o helper.o tree.o dict.o compactor.o -o huffmaninator $(C_FLAGS)
