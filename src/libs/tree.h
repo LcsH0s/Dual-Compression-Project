@@ -7,6 +7,8 @@
 
 typedef struct vocc // Vector containing the occurences class
 {
+    Object obj;
+
     unsigned int *n;
     char *chars;
     size_t len;
@@ -21,6 +23,8 @@ typedef struct vocc // Vector containing the occurences class
 
 typedef struct tree // Huffman tree class
 {
+    Object obj;
+
     char c;
     int weight;
     char in_dict;
@@ -30,6 +34,8 @@ typedef struct tree // Huffman tree class
 
 typedef struct vtree
 {
+    Object obj;
+
     tree **list;
     size_t len;
 

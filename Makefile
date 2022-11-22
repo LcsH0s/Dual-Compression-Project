@@ -6,7 +6,7 @@ CC=gcc
 all: build cleanup
 
 build: libs main  
-	$(CC) main.o helper.o tree.o dict.o compactor.o -o huffmaninator $(C_FLAGS)
+	$(CC) main.o helper.o tree.o dict.o compactor.o -o huffman $(C_FLAGS)
 
 main:
 	$(CC) -c $(SRC_FILE)main.c -o main.o $(C_FLAGS)
@@ -21,5 +21,5 @@ cleanup:
 	rm *.o
 
 exec:
-	./huffmaninator -c -f test.txt -o archive.hca
-	./huffmaninator -x -f archive.hca -o out.txt
+	./huffman -c -f test.txt -o archive.hca
+	./huffman -x -f archive.hca -o out.txt

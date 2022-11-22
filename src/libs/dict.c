@@ -190,6 +190,8 @@ void dict_load(dict *self, FILE *f)
     short *bitsizes;
     unsigned short *bitfield;
 
+    Object_init(self);
+
     self->disp = &dict_disp;
     self->save = &dict_save;
     self->get_index = &get_index_of_char;

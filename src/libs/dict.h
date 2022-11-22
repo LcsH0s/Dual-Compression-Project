@@ -9,6 +9,8 @@
 
 typedef struct dict
 {
+    Object obj;
+
     short len;
     char *chars;
     short *bitsizes;

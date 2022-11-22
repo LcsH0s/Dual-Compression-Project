@@ -8,6 +8,8 @@
 
 void vocc_init(vocc *self)
 {
+    Object_init(self);
+
     self->chars = malloc(sizeof(char) * 100);
     self->n = malloc(sizeof(char) * 100);
 
@@ -113,6 +115,8 @@ void vocc_disp(vocc *self)
 
 void vtree_init(vtree *self, const vocc *occurences)
 {
+    Object_init(self);
+
     self->list = malloc(sizeof(tree *) * occurences->len);
     self->len = occurences->len;
     self->sort = &vtree_sort;

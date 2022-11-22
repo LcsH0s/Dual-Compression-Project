@@ -2,8 +2,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <uuid/uuid.h>
 
 #include "helper.h"
+
+int Object_init(Object *self)
+{
+    self->Object_init = &Object_init;
+    self->Object_clean = &Object_clean;
+    uuid_generate_random(self->uuid);
+    return 0;
+}
+
+int Object_clean(Object *self)
+{
+    free(self->uuid);
+    return 0;
+}
 
 void show_help()
 {
